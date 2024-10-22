@@ -9,25 +9,23 @@ G = nx.Graph()
 stations = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 G.add_nodes_from(stations)
 
-# Связи между станциями
-connections = [('A', 'B'), ('A', 'C'), ('B', 'D'), 
-               ('B', 'D'), ('D', 'F'), ('G', 'D'),
-               ('C', 'D'), ('D', 'E'), ('E', 'F'), 
-               ('F', 'G'), ('F', 'H'), ('G', 'H')]
-G.add_edges_from(connections)
+# Связи между станциями с расстояниями
+connections = [
+    ('A', 'B', 5),
+    ('A', 'C', 10),
+    ('B', 'D', 3),
+    ('B', 'D', 2),  
+    ('D', 'F', 4),
+    ('G', 'D', 6),
+    ('C', 'D', 1),
+    ('D', 'E', 2),
+    ('E', 'F', 3),
+    ('F', 'G', 8),
+    ('F', 'H', 7),
+    ('G', 'H', 5)
+]
+G.add_weighted_edges_from(connections)
 
-G.add_edge('A', 'B', weight=5)
-G.add_edge('A', 'C', weight=10)
-G.add_edge('B', 'D', weight=3)
-G.add_edge('B', 'D', weight=8)  
-G.add_edge('D', 'F', weight=6)
-G.add_edge('G', 'D', weight=12)
-G.add_edge('C', 'D', weight=2)
-G.add_edge('D', 'E', weight=4)
-G.add_edge('E', 'F', weight=9)
-G.add_edge('F', 'G', weight=7)
-G.add_edge('F', 'H', weight=11)
-G.add_edge('G', 'H', weight=1)
 
 # Анализ графа
 print(f"\nКоличество вершин: {G.number_of_nodes()}")
@@ -44,11 +42,10 @@ print(f"{func.bfs_recursive(G, deque(["A"]))} - BFS\n")
 
 # dijkstra
 # Вычисление кратчайших путей
-shortest_paths = dict(nx.single_source_dijkstra_path(G, 'A'))
-shortest_distances = dict(nx.single_source_dijkstra_path_length(G, 'A'))
+shortest_distances = dict(func.dijkstra(connections, 'A'))
 print("Кратчайшие пути от 'A':")
-for destination, path in shortest_paths.items():
-    print(f"К ' {destination}': путь {path}, расстояние {shortest_distances[destination]}")
+for vertex, distance in shortest_distances.items():
+    print(f"Путь к '{vertex}': {distance}")
 
 # Рисуем граф
 plt.figure(figsize=(8, 6))

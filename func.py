@@ -28,9 +28,21 @@ def bfs_recursive(graph, queue, visited=None):
     # Рекурсивний виклик функції з тією ж чергою та множиною відвіданих вершин
     bfs_recursive(graph, queue, visited)
 
-def dijkstra(graph, start):
+def dijkstra(connections, start):
+    # Создание графа в виде словаря с весами
+    graph = {}
+    for src, dest, weight in connections:
+        if src not in graph:
+            graph[src] = {}
+        if dest not in graph:
+            graph[dest] = {}
+        graph[src][dest] = weight
+        graph[dest][src] = weight  # Если граф неориентированный
+
+    # Инициализация расстояний до вершин
     distances = {vertex: float('infinity') for vertex in graph}
     distances[start] = 0
+
     unvisited = list(graph.keys())
     visited = []
 
@@ -47,7 +59,5 @@ def dijkstra(graph, start):
 
         visited.append(current_vertex)
         unvisited.remove(current_vertex)
-        
-       
 
     return distances
